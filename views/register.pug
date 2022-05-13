@@ -1,0 +1,32 @@
+doctype html
+html(lang='ru')
+  head
+    meta(charset='UTF-8')
+    title Регистрация | Blogoshpere
+    link(rel="preconnect" href="https://fonts.googleapis.com")
+    link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
+    link(href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet")
+    link(rel='stylesheet' href='./stylesheets/style.css')
+    //link(rel="shortcut icon" href="/images/icon.jpg" type="image/jpg")
+  body
+    header
+      .left_empty_header_part
+      .name_header_part
+        a.main_ref(onclick="location.href='/'") Blogosphere
+      .center_empty_header_part
+      .buttons_header_part
+        button.login_button(onclick="location.href='./login'") Войти
+        button.register_button(onclick="location.href='./register'") Зарегистрироваться
+      .right_empty_header_part
+    .main
+      .bulb
+        form.login_form(action='', method="post")
+          h1 Зарегистрироваться
+          input(type='text' placeholder='name', name='name')
+          input(type='text' placeholder='surname', name='surname')
+          input(type='text' placeholder='username', name='username')
+          input(type='password' placeholder='password', name='password')
+          button.form_button Зарегистрироваться
+          p.message
+            | Уже есть аккаунт? 
+            a(href='/login') Войти

@@ -1,0 +1,56 @@
+doctype html
+html(lang='ru')
+  head
+    meta(charset='UTF-8')
+    title Создание блога | Blogoshpere
+    link(rel="preconnect" href="https://fonts.googleapis.com")
+    link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
+    link(href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet")
+    link(rel='stylesheet' href='../stylesheets/style.css')
+    //link(rel="shortcut icon" href="/images/icon.jpg" type="image/jpg")
+  body
+    header
+      .left_empty_header_part
+      .name_header_part
+        a.main_ref(onclick="location.href='/'") Blogosphere
+      .center_empty_header_part
+      .buttons_header_part
+        if !logged_in
+          button.login_button(onclick="location.href='./login'") Войти
+          button.register_button(onclick="location.href='./register'") Зарегистрироваться
+        else
+          nav
+            ul.main_menu
+              li.main_menu_elem #{name} ▼
+                ul.hover_menu
+                  li.hover_menu_elem
+                    a.main_ref(onclick="location.href='/user/" + username + "'") Профиль
+                  li.hover_menu_elem
+                    a.main_ref(onclick="location.href='/settings'") Настройки
+                  li.hover_menu_elem
+                    a.main_ref(onclick="location.href='/logout'") Выйти
+      .right_empty_header_part
+    .main
+      .bulb
+          input(type='text' id='name_input' name='name' placeholder='name')
+          textarea(rows="10" cols="25" id='description_input' name='description' placeholder='description' style='font-size: 20px')
+          button(onclick="send()" style='height: 40px; font-size: 20px;') Создать
+    script.
+      function send() {
+        var now_name = document.getElementById('name_input').value;
+        var now_description = document.getElementById('description_input').value;
+        data = {
+          name: now_name,
+          description: now_description
+        };
+        var settings = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        };
+        fetch('/create/blog', settings).then(response => response.text()).then((body) => {
+          window.location.replace("/blog/" + body);
+        });
+      }

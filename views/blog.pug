@@ -1,0 +1,66 @@
+doctype html
+html(lang='ru')
+  head
+    meta(charset='UTF-8')
+    title #{blog.name} | Blogoshpere
+    link(rel="preconnect" href="https://fonts.googleapis.com")
+    link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
+    link(href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet")
+    link(rel='stylesheet' href='../stylesheets/style.css')
+    //link(rel="shortcut icon" href="/images/icon.jpg" type="image/jpg")
+  body
+    header
+      .left_empty_header_part
+      .name_header_part
+        a.main_ref(onclick="location.href='/'") Blogosphere
+      .center_empty_header_part
+      .buttons_header_part
+        if !logged_in
+          button.login_button(onclick="location.href='/login'") Войти
+          button.register_button(onclick="location.href='/register'") Зарегистрироваться
+        else
+          nav
+            ul.main_menu
+              li.main_menu_elem #{my_name} ▼
+                ul.hover_menu
+                  li.hover_menu_elem
+                    a.main_ref(onclick="location.href='/user/" + username + "'") Профиль
+                  li.hover_menu_elem
+                    a.main_ref(onclick="location.href='/settings'") Настройки
+                  li.hover_menu_elem
+                    a.main_ref(onclick="location.href='/logout'") Выйти
+      .right_empty_header_part
+    .main
+      .bulb
+        h1 #{blog.name}
+        h2 #{blog.description}
+      if logged_in && username == my_username
+        .bulb
+          h1 Новый пост
+          input(type='text' id='label_input' name='label' placeholder='label')
+          textarea(rows="10" cols="25" id='text_input' name='text' placeholder='text' style='font-size: 20px')
+          button(onclick="send()" style='height: 40px; font-size: 20px;') Отправить
+      each post in posts_list
+        .bulb
+          h1 #{post.label}
+          h2 #{post.text}
+    script.
+      function send() {
+        var now_label = document.getElementById('label_input').value;
+        var now_text = document.getElementById('text_input').value;
+        data = {
+          unique_id: #{un_id},
+          label: now_label,
+          text: now_text
+        };
+        var settings = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        };
+        fetch('/blog', settings).then(function (response) {
+          window.location.replace("/blog/" + #{un_id});
+        });
+      }

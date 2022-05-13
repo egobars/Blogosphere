@@ -1,0 +1,36 @@
+doctype html
+html(lang='ru')
+  head
+    meta(charset='UTF-8')
+    title Главная | Blogoshpere
+    link(rel="preconnect" href="https://fonts.googleapis.com")
+    link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
+    link(href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet")
+    link(rel='stylesheet' href='./stylesheets/style.css')
+    //link(rel="shortcut icon" href="/images/icon.jpg" type="image/jpg")
+  body
+    header
+      .left_empty_header_part
+      .name_header_part
+        a.main_ref(onclick="location.href='/'") Blogosphere
+      .center_empty_header_part
+      .buttons_header_part
+        if !logged_in
+          button.login_button(onclick="location.href='./login'") Войти
+          button.register_button(onclick="location.href='./register'") Зарегистрироваться
+        else
+          nav
+            ul.main_menu
+              li.main_menu_elem #{name} ▼
+                ul.hover_menu
+                  li.hover_menu_elem
+                    a.main_ref(onclick="location.href='/user/" + username + "'") Профиль
+                  li.hover_menu_elem
+                    a.main_ref(onclick="location.href='/settings'") Настройки
+                  li.hover_menu_elem
+                    a.main_ref(onclick="location.href='/logout'") Выйти
+      .right_empty_header_part
+    .main
+      .bulb
+        h1 Привет, #{name} #{surname}!
+        h3 Добро пожаловать на Blogosphere.

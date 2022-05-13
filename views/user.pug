@@ -1,0 +1,48 @@
+doctype html
+html(lang='ru')
+  head
+    meta(charset='UTF-8')
+    title #{name} #{surname} | Blogoshpere
+    link(rel="preconnect" href="https://fonts.googleapis.com")
+    link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
+    link(href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet")
+    link(rel='stylesheet' href='../stylesheets/style.css')
+    //link(rel="shortcut icon" href="/images/icon.jpg" type="image/jpg")
+  body
+    header
+      .left_empty_header_part
+      .name_header_part
+        a.main_ref(onclick="location.href='/'") Blogosphere
+      .center_empty_header_part
+      .buttons_header_part
+        if !logged_in
+          button.login_button(onclick="location.href='/login'") Войти
+          button.register_button(onclick="location.href='/register'") Зарегистрироваться
+        else
+          nav
+            ul.main_menu
+              li.main_menu_elem #{my_name} ▼
+                ul.hover_menu
+                  li.hover_menu_elem
+                    a.main_ref(onclick="location.href='/user/" + my_username + "'") Профиль
+                  li.hover_menu_elem
+                    a.main_ref(onclick="location.href='/settings'") Настройки
+                  li.hover_menu_elem
+                    a.main_ref(onclick="location.href='/logout'") Выйти
+      .right_empty_header_part
+    .main
+      .bulb
+        .all_user_info
+          img(src=image_url height=300 width=300)
+          .user_info
+            h1 #{name} #{surname}
+            h2 #{description}
+      .bulb
+        h1 Блоги этого пользователя:
+      if logged_in && username == my_username
+        button(onclick="location.href='/create/blog'" style="box-shadow: 4px 4px 8px 2px rgba(34, 60, 80, 0.4); padding: 30px; border-radius: 15px;")
+          h1 + Новый блог
+      each blog in blogs_list
+        .bulb_clickable(onclick="location.href='/blog/" + blog.unique_id + "'")
+          h1 #{blog.name}
+          h2 #{blog.description}

@@ -1,0 +1,102 @@
+doctype html
+html(lang='ru')
+  head
+    meta(charset='UTF-8')
+    title Настройки | Blogoshpere
+    link(rel="preconnect" href="https://fonts.googleapis.com")
+    link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
+    link(href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet")
+    link(rel='stylesheet' href='./stylesheets/style.css')
+    //link(rel="shortcut icon" href="/images/icon.jpg" type="image/jpg")
+  body
+    header
+      .left_empty_header_part
+      .name_header_part
+        a.main_ref(onclick="location.href='/'") Blogosphere
+      .center_empty_header_part
+      .buttons_header_part
+        if !logged_in
+          button.login_button(onclick="location.href='./login'") Войти
+          button.register_button(onclick="location.href='./register'") Зарегистрироваться
+        else
+          nav
+            ul.main_menu
+              li.main_menu_elem #{name} ▼
+                ul.hover_menu
+                  li.hover_menu_elem
+                    a.main_ref(onclick="location.href='/user/" + username + "'") Профиль
+                  li.hover_menu_elem
+                    a.main_ref(onclick="location.href='/settings'") Настройки
+                  li.hover_menu_elem
+                    a.main_ref(onclick="location.href='/logout'") Выйти
+      .right_empty_header_part
+    .main
+      .bulb
+        .settings_page
+          .all_user_info
+            .upload_file(style="margin-bottom: -404px; display: flex; flex-direction: column")
+              img(src=image_url width=300 height=300 id='background_img' style="position: relative; top: 2px; left: 2px; z_index: 1")
+              input.input_file(type='file' id='file_input' onchange='fileChange(this.files)' name='image' accept='image/*' style="opacity: 0%; position: relative; top: -300px; left: 0px; z-index: 3")
+              img.kr(src='./images/kr.png' width=300 height=100 style="position: relative; top: -402px; left: 2px; z-index: 2")
+            .user_info(style='gap: 10px')
+              .input_bar
+                input(type='text' id='name_input' name='name' value=name style='width: 49%')
+                input(type='text' id='surname_input' name='surname' value=surname style='width: 49%')
+              textarea(rows="10" cols="25" id='description_input' name='description' style='font-size: 20px') #{description}
+          button(onclick="send()" style='height: 40px; font-size: 20px;') Сохранить
+    script.
+      var file;
+
+      function finish(data) {
+        var settings = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          };
+          fetch('/settings', settings).then(function (response) {
+            window.location.replace("/settings");
+          });
+      }
+
+      function fileChange(files) {
+        file = files[0];
+        var inpt = document.getElementById('background_img');
+        inpt.setAttribute("src", URL.createObjectURL(file));
+      }
+
+      function send() {
+        var now_name = document.getElementById('name_input').value;
+        var now_surname = document.getElementById('surname_input').value;
+        var now_description = document.getElementById('description_input').value;
+        var reader = new FileReader();
+
+        reader.addEventListener("load", () => {
+          var idx = 0;
+          while (reader.result[idx] != ',') {
+            ++idx;
+          }
+          ++idx;
+          data = {
+            image: reader.result.slice(idx),
+            name: now_name,
+            surname: now_surname,
+            description: now_description
+          };
+          finish(data);
+        }, false);
+
+        if (file == null) {
+          data = {
+            image: '-',
+            name: now_name,
+            surname: now_surname,
+            description: now_description
+          };
+          finish(data);
+        }
+        else {
+          reader.readAsDataURL(file);
+        }
+      }
